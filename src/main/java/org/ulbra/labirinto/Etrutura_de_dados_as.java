@@ -16,6 +16,7 @@ public class Etrutura_de_dados_as {
         List<Sala> salas = new ArrayList<>();
         int pontuacaoInicial = 10;
         int idSala = 0;
+        int numeroMinimo = 4;
 
         while (true) { 
             System.out.println("\nJogo do labirinto");
@@ -31,7 +32,7 @@ public class Etrutura_de_dados_as {
                     String tipo = sc.nextLine();
                     TipoSala tipoSala;
 
-                    switch (tipo) {
+                    switch (tipo.toUpperCase()) {
                         case "NORMAL" -> tipoSala = TipoSala.NORMAL;
                         case "ARMADILHA" -> tipoSala = TipoSala.ARMADILHA;
                         case "PREMIO" -> tipoSala = TipoSala.PREMIO;
@@ -69,7 +70,7 @@ public class Etrutura_de_dados_as {
 
                     break;
                 case "5":
-                    if(labTeste.tamanhoLista() < 2) {
+                    if(labTeste.tamanhoLista() < numeroMinimo) {
                         System.out.println("\nO jogo não pode ser iniciado com menos de 10 salas no labirinto");
                     } else if(jogadores.isEmpty()) {
                         System.out.println("\nCrie um jogador antes de inicar o jogo");
@@ -88,9 +89,6 @@ public class Etrutura_de_dados_as {
         Scanner jogo = new Scanner(System.in);
         No<Sala> salaAtual = labirinto.inicio;
         int descontoPontos = 5;
-        int max = 1;
-        int min = 0;
-        int range = max - min + 1;
         boolean fimDeJogo = false;
 
         System.out.println("\nO jogador " + jogador.getNome() + " começa na sala " + salaAtual.dado.getDescricao());
@@ -101,7 +99,7 @@ public class Etrutura_de_dados_as {
             int evento = (int)Math.round(Math.random());
 
             switch (opcao) {
-                case "1":
+                case "1" -> {
                     System.out.println();
                     System.out.println(jogador.getNome() + " avança uma sala...");
                     salaAtual = salaAtual.proximo;
@@ -116,18 +114,19 @@ public class Etrutura_de_dados_as {
                                 System.out.println("O jogador volta uma casa");
                                 salaAtual = salaAtual.anterior;
                             }
-                    }
+                        }
                         case TipoSala.PREMIO -> {
-                            System.out.println("\nParabéns! Você encontrou um item raro.");
+                            System.out.println("\nVocê entra numa sala de prêmio");
 
                             if(evento == 0) {
                                 System.out.println("O jogador ganha " + descontoPontos + " pontos");
                                 jogador.setPontuacao(jogador.getPontuacao() + descontoPontos);
                             } else {
+                                System.out.println("\nParabéns! Você encontrou um item raro.");
                                 System.out.println("O jogador pega o item");
                                 jogador.pegarItem("Adaga de diamante");
                             }
-                    }
+                        }
                         case TipoSala.SAIDA -> {
                             if(salaAtual == labirinto.fim) {
                                 System.out.println("\nVocê venceu o jogo!");
@@ -139,15 +138,14 @@ public class Etrutura_de_dados_as {
                             } else {
                                 System.out.println("\nVocê chegou à saída, mas ainda não explorou tudo!");
                             }
-                    }
+                        }
                         case TipoSala.NORMAL -> {
                             System.out.println(jogador.getNome() + " chega a sala " + salaAtual.dado.getDescricao());
                         }
                         default -> throw new AssertionError();
                     }
-
-                    break;
-                case "2":
+                }
+                case "2" -> {
                     System.out.println();
                     System.out.println(jogador.getNome() + " volta uma sala...");
                     salaAtual = salaAtual.anterior;
@@ -194,15 +192,15 @@ public class Etrutura_de_dados_as {
 
                         default -> throw new AssertionError();
                     }
-
-                    break;
-                case "3":
+                }
+                case "3" -> {
                     System.out.println();
                     System.out.println(salaAtual.dado.getDescricao());
-                    break;
-                default:
+                }
+                default -> {
                     jogo.close();
                     throw new AssertionError();
+                }
             }
 
            
