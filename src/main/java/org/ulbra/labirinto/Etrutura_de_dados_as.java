@@ -24,7 +24,7 @@ public class Etrutura_de_dados_as {
             String opcao = sc.nextLine();
             
             switch (opcao) {
-                case "1":
+                case "1" -> {
                     System.out.println("\nDigite uma descrição para a sala");
                     String desc = sc.nextLine();
 
@@ -45,12 +45,12 @@ public class Etrutura_de_dados_as {
                     labTeste.adicionar(salaCriada);
                     salas.add(salaCriada);
                     idSala += 1;
-                    break;
-                case "2":
+                }
+                case "2" -> {
                     System.out.println("\nSalas do labirinto");
                     labTeste.imprimirLista();
-                    break;
-                case "3":
+                }
+                case "3" -> {
                     labTeste.imprimirLista();
                     System.out.println("\nDigite o id da sala que deseja remover");
                     String idSalaRemovida = sc.nextLine();
@@ -60,16 +60,15 @@ public class Etrutura_de_dados_as {
                         }
                     });
                     System.out.println(labTeste.tamanhoLista());
-                    break;
-                case "4":
+                }
+                case "4" -> {
                     System.out.println("\nDigite um nome para o jogador");
                     String player = sc.nextLine();
 
                     Jogador jogadorCriado = new Jogador(player, pontuacaoInicial);
                     jogadores.add(jogadorCriado);
-
-                    break;
-                case "5":
+                }
+                case "5" -> {
                     if(labTeste.tamanhoLista() < numeroMinimo) {
                         System.out.println("\nO jogo não pode ser iniciado com menos de 10 salas no labirinto");
                     } else if(jogadores.isEmpty()) {
@@ -77,9 +76,8 @@ public class Etrutura_de_dados_as {
                     } else {
                         iniciarJogo(labTeste, jogadores.getFirst());
                     }
-                    break;
-                default:
-                    throw new AssertionError("Opção invalida");
+                }
+                default -> throw new AssertionError("Opção invalida");
             }
         }
         
@@ -93,10 +91,21 @@ public class Etrutura_de_dados_as {
 
         System.out.println("\nO jogador " + jogador.getNome() + " começa na sala " + salaAtual.dado.getDescricao());
         while (!fimDeJogo) { 
+
+            if(salaAtual == labirinto.fim) {
+                System.out.println("Voce explorou tudo, parabens");
+                System.out.println(jogador.getNome() + " | " + jogador.getPontuacao());
+                System.out.println(Arrays.toString(jogador.getItens().toArray()));
+                System.out.println("Salas visitadas: " + labirinto.tamanhoLista());
+                break;
+            }
+
             System.out.println("O que deseja fazer?");
             System.out.println("1 - AVANÇAR\n2 - VOLTAR\n3 - EXIBIR DESCRIÇÃO DA SALA");
             String opcao = jogo.nextLine();
             int evento = (int)Math.round(Math.random());
+
+            
 
             switch (opcao) {
                 case "1" -> {
@@ -146,9 +155,16 @@ public class Etrutura_de_dados_as {
                     }
                 }
                 case "2" -> {
+                    if(salaAtual == labirinto.inicio) {
+                        System.out.println("Voce esta na primeira sala ainda!");
+                        break;
+                    }
+
                     System.out.println();
                     System.out.println(jogador.getNome() + " volta uma sala...");
                     salaAtual = salaAtual.anterior;
+
+
 
                     switch (salaAtual.dado.getTipo()) {
                         case TipoSala.ARMADILHA -> {
